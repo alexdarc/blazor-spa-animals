@@ -1,0 +1,22 @@
+﻿@page "/"
+@using WebApplication1.Data
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<p>
+    <button class="btn btn-primary" @onclick="ChangeAnimal">Say hello</button>
+</p>
+
+<HelloAnimal SomeAnimal="@randomAnimal"></HelloAnimal>
+
+
+@code {
+    Animal randomAnimal;
+
+    private async void ChangeAnimal()
+    {
+        randomAnimal = await AnimalListService.GetRandomAnimal();
+    }
+}

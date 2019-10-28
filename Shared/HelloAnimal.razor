@@ -1,0 +1,17 @@
+@using WebApplication1.Data
+
+@if (SomeAnimal != null)
+{
+    <h2>Hello @SomeAnimal.Name!</h2>
+    <img src="@SomeAnimal.ImageUrl"
+        alt=""
+        style="max-width: 500px"/>
+}
+
+
+@code {
+    // Demonstrates how a parent component can supply parameters
+    [Parameter]
+    public Animal SomeAnimal { get; set; }
+
+}

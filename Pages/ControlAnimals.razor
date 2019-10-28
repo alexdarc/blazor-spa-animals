@@ -1,0 +1,88 @@
+@page "/controlAnimals"
+
+@using WebApplication1.Data
+
+<div class="row">
+    <div class="col mb-3">
+        <h2>Add animal</h2>
+        <EditForm Model="@AddAnimalRequestModel" OnValidSubmit="@AddAnimal">
+            <DataAnnotationsValidator />
+
+            <div class="form-row">
+                <div class="col-md-6 form-group">
+                    <label for="animalName">Animal Name</label>
+                    <InputText class="form-control"
+                        placeholder="Dog"
+                        id="animalName"
+                        @bind-Value="AddAnimalRequestModel.Name" />
+                    <small class="form-text">
+                        <ValidationMessage For="@(() => AddAnimalRequestModel.Name)" />
+                    </small>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="animalImage">Image Url</label>
+                    <InputText class="form-control"
+                        placeholder="http://..."
+                        id="animalImage"
+                        @bind-Value="AddAnimalRequestModel.Image" />
+                    <small class="form-text">
+                        <ValidationMessage For="@(() => AddAnimalRequestModel.Image)" />
+                    </small>
+                </div>
+            </div>
+
+            <button class="btn btn-primary"
+                type="submit">Add</button>
+        </EditForm>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <h2>List of animals</h2>
+        <ul class="list-group">
+            @foreach (var animal in animalList)
+            {
+                <li class="align-items-center d-flex justify-content-between list-group-item">
+                    <div class="animal-content">
+                        <img class="img-thumbnail"
+                            style="max-width: 50px"
+                            src="@animal.ImageUrl"
+                            alt="">
+                        @animal.Name
+                    </div>
+                    <button class="btn btn-sm"
+                        data-toggle="tooltip"
+                        title="Remove"
+                        @onclick="@(() => RemoveAnimal(animal))">
+                        <span class="oi oi-trash"></span>
+                    </button>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+
+@code {
+
+    private List<Animal> animalList = AnimalListService.GetAnimalList();
+
+    private AddAnimalRequestModel AddAnimalRequestModel = new AddAnimalRequestModel();
+
+    private void AddAnimal()
+    {
+        AnimalListService.AddAnimal(
+            animal: new Animal(
+                name: AddAnimalRequestModel.Name,
+                imageUrl: AddAnimalRequestModel.Image));
+
+        AddAnimalRequestModel = new AddAnimalRequestModel();
+    }
+
+    private void RemoveAnimal(
+        Animal animal)
+    {
+        AnimalListService.RemoveAnimal(animal);
+    }
+}
